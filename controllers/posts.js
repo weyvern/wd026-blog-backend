@@ -32,7 +32,9 @@ export const updatePost = asyncHandler(async (req, res, next) => {
   if (!found) throw new ErrorResponse(`Post with id of ${id} doesn't exist`, 404);
   if (userId !== found.author._id.toString())
     throw new ErrorResponse(`You have no permissions to update this article`, 401);
-  const updatedPost = await Post.findOneAndUpdate({ _id: id }, body, { new: true });
+  const updatedPost = await (
+    await Post.findOneAndUpdate({ _id: id }, body, { new: true })
+  ).populate('author');
   res.json(updatedPost);
 });
 
