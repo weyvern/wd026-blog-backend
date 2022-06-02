@@ -35,8 +35,8 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         verify the password [x] https://www.npmjs.com/package/bcrypt?activeTab=readme
         if password not a match => throw ErrorResponse [x]
         if password match
-          Create token jsonwebtoken https://www.npmjs.com/package/jsonwebtoken []
-          Send token => res.json() res.set() res.cookie() []
+          Create token jsonwebtoken https://www.npmjs.com/package/jsonwebtoken [x]
+          Send token => res.json() res.set() res.cookie() [x]
   */
   const {
     body: { email, password }
@@ -50,5 +50,8 @@ export const loginUser = asyncHandler(async (req, res, next) => {
 });
 
 export const getUser = asyncHandler(async (req, res, next) => {
-  res.json({ success: 'this is the user' });
+  const { userId } = req;
+  const user = await User.findById(userId);
+  if (!user) throw new ErrorResponse(`User doesn't exist`, 404);
+  res.json(user);
 });
